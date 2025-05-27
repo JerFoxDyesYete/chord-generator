@@ -3,55 +3,41 @@
 
 <head>
 	<meta charset="UTF-8" />
-	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<link rel="stylesheet" href="style.css">
 	<title>Chord Image Generator</title>
-	<link rel="stylesheet" href="style.css" />
-	<script defer src="pianokeys.js"></script>
 </head>
 
 <body>
-	<div class="container">
+	<main>
+		<img class="logo" src="https://www.hearandplay.com/images/2020/text-animate.png" alt="Logo" />
+
 		<h2>Chord Image Generator</h2>
-		<form name="chord_generator">
-			<div class="form-row">
-				<label for="first0">Select Notes:</label>
-				<div class="selector-row">
-					<select id="first0" onchange="update()"></select>
-					<select id="first1" onchange="update()"></select>
-					<select id="first2" onchange="update()"></select>
-					<select id="first3" onchange="update()"></select>
-					<select id="first4" onchange="update()"></select>
-					<input type="color" name="rgb" value="#ff0000" oninput="update()" />
-				</div>
-			</div>
-
-			<div class="form-row">
-				<input type="button" value="Add Keys" onclick="addKeys()" />
-			</div>
-
-			<div class="form-row">
-				<input type="button" value="Create Final Image" onclick="generateCode()" />
-			</div>
+		<form id="chordForm">
+			<div class="input-row" id="keys-color-container"></div>
 		</form>
+		<div id="preview">
+			<img id="previewImage" src="" alt="Chord Preview" />
+			<div class="overlayBtns">
+				<button id="copyBtn" class="iconBtn" title="Copy Embed Code">
+					📋 Copy
+					<span class="copiedMsg" id="copiedMsg">Copied</span>
+				</button>
+				<button id="downloadBtn" class="iconBtn" title="Download Image">
+					⬇️ Download
+				</button>
+			</div>
+		</div>
 
-		<div id="chordName"></div>
-		<div id="preview"></div>
-		<div id="code"></div>
-	</div>
+		<hr class="separator" />
 
-	<script>
-		// Populate all select dropdowns with note options
-		const notes = ['', 'Cb', 'C', 'C#', 'Db', 'D', 'D#', 'Eb', 'E', 'E#', 'Fb', 'F', 'F#', 'Gb', 'G', 'G#', 'Ab', 'A', 'A#', 'Bb', 'B', 'B#'];
-		for (let i = 0; i <= 4; i++) {
-			const select = document.getElementById(`first${i}`);
-			notes.forEach(note => {
-				const option = document.createElement('option');
-				option.value = note;
-				option.textContent = note;
-				select.appendChild(option);
-			});
-		}
-	</script>
+		<h6>
+			Powered by
+			<a href="https://www.hearandplay.com" style="font-weight: bold; text-decoration: none;">
+				Hearandplay Music
+			</a>
+		</h6>
+	</main>
 </body>
-
+	<script type="text/javascript" src="piano.js"></script>
 </html>
