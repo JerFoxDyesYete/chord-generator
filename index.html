@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<title>Chord Image Generator</title>
+	<link rel="stylesheet" href="style.css" />
+	<script defer src="pianokeys.js"></script>
+</head>
+
+<body>
+	<div class="container">
+		<h2>Chord Image Generator</h2>
+		<form name="chord_generator">
+			<div class="form-row">
+				<label for="first0">Select Notes:</label>
+				<div class="selector-row">
+					<select id="first0" onchange="update()"></select>
+					<select id="first1" onchange="update()"></select>
+					<select id="first2" onchange="update()"></select>
+					<select id="first3" onchange="update()"></select>
+					<select id="first4" onchange="update()"></select>
+					<input type="color" name="rgb" value="#ff0000" oninput="update()" />
+				</div>
+			</div>
+
+			<div class="form-row">
+				<input type="button" value="Add Keys" onclick="addKeys()" />
+			</div>
+
+			<div class="form-row">
+				<input type="button" value="Create Final Image" onclick="generateCode()" />
+			</div>
+		</form>
+
+		<div id="chordName"></div>
+		<div id="preview"></div>
+		<div id="code"></div>
+	</div>
+
+	<script>
+		// Populate all select dropdowns with note options
+		const notes = ['', 'Cb', 'C', 'C#', 'Db', 'D', 'D#', 'Eb', 'E', 'E#', 'Fb', 'F', 'F#', 'Gb', 'G', 'G#', 'Ab', 'A', 'A#', 'Bb', 'B', 'B#'];
+		for (let i = 0; i <= 4; i++) {
+			const select = document.getElementById(`first${i}`);
+			notes.forEach(note => {
+				const option = document.createElement('option');
+				option.value = note;
+				option.textContent = note;
+				select.appendChild(option);
+			});
+		}
+	</script>
+</body>
+
+</html>
