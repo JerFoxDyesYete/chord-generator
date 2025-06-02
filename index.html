@@ -1,43 +1,48 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-	<meta charset="UTF-8" />
-	<meta name="viewport" content="width=device-width, initial-scale=1" />
-	<link rel="stylesheet" href="style.css">
-	<title>Chord Image Generator</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Chord Image Generator</title>
+  <link rel="stylesheet" href="styles.css" />
 </head>
-
 <body>
-	<main>
-		<img class="logo" src="https://www.hearandplay.com/images/2020/text-animate.png" alt="Logo" />
+  <main>
+    <img class="logo" src="https://www.hearandplay.com/images/2020/text-animate.png" alt="Logo" />
+    <h2>Chord Image Generator</h2>
+    <h8>Select Notes below:</h8>
+    <form id="chordForm">
+      <div id="color-picker-wrapper">
+        <input type="color" id="color" value="#2087c9" />
+      </div>
+      <div id="keys-rows-container"></div>
+      <div class="buttons-row">
+        <button type="button" id="addKeysBtn">Add Keys</button>
+        <button type="button" id="clearKeysBtn">Clear Keys</button>
+      </div>
+    </form>
 
-		<h2>Chord Image Generator</h2>
-		<form id="chordForm">
-			<div class="input-row" id="keys-color-container"></div>
-		</form>
-		<div id="preview">
-			<img id="previewImage" src="" alt="Chord Preview" />
-			<div class="overlayBtns">
-				<button id="copyBtn" class="iconBtn" title="Copy Embed Code">
-					📋 Copy
-					<span class="copiedMsg" id="copiedMsg">Copied</span>
-				</button>
-				<button id="downloadBtn" class="iconBtn" title="Download Image">
-					⬇️ Download
-				</button>
-			</div>
-		</div>
+    <div id="preview">
+      <img id="previewImage" src="" alt="Chord Preview" />
+      <div class="overlayBtns">
+        <button id="copyBtn" class="iconBtn" title="Copy Embed Code">
+          📋 Copy Embed
+          <span class="copiedMsg" id="copiedMsg">Embeb</span>
+        </button>
+        <button id="downloadBtn" class="iconBtn" title="Download Image">
+          ⬇️ Download
+        </button>
+      </div>
+    </div>
 
-		<hr class="separator" />
-
-		<h6>
-			Powered by
-			<a href="https://www.hearandplay.com" style="font-weight: bold; text-decoration: none;">
-				Hearandplay Music
-			</a>
-		</h6>
-	</main>
+    <hr class="separator" />
+    <h6>
+      Powered by
+      <a href="https://www.hearandplay.com" style="font-weight: bold; text-decoration: none;">
+        Hearandplay Music
+      </a>
+    </h6>
+  </main>
+  <script src="script.js"></script>
 </body>
-	<script type="text/javascript" src="piano.js"></script>
 </html>
