@@ -285,7 +285,7 @@
     <hr class="separator" />
     <h6>
       Powered by
-      <a href="https://www.hearandplay.com" style="font-weight: bold; text-decoration: none;">
+      <a href="https://www.hearandplay.com/main" style="font-weight: bold; text-decoration: none;">
         Hearandplay Music
       </a>
     </h6>
@@ -316,7 +316,7 @@
       select.id = id;
       const emptyOption = document.createElement("option");
       emptyOption.value = "";
-      emptyOption.textContent = "-";
+      emptyOption.textContent = "-"; //blank
       select.appendChild(emptyOption);
       notes.forEach(note => {
         const option = document.createElement("option");
@@ -354,71 +354,54 @@
         return;
       }
 
-      const colorHex = colorInput.value.replace("#", "");
-      const notesStr = selectedNotes.join(",");
-      latestImgURL = `https://www.hearandplaymusic.com/dynamic_image/pianokeys.php?notes=${encodeURIComponent(notesStr)}&color=${colorHex}&size=5`;
+      // Convert sharps '#' to 's' as per URL format requirement
+      const notesStr = selectedNotes.map(n => n.replace("#", "s")).join(",");
+
+      // Remove '#' encoding for commas (do not encode commas)
+      const colorHex = colorInput.value.replace("#", "").toUpperCase();
+
+      latestImgURL = `https://www.hearandplaymusic.com/dynamic_image/pianokeys.php?notes=${notesStr}&color=${colorHex}&size=5`;
 
       previewImg.src = latestImgURL;
       preview.style.display = "block";
     }
 
-    rowsContainer.appendChild(createKeysRow(rowCount));
-
-    function checkAddButton() {
-      addKeysBtn.disabled = rowCount >= maxRows - 1;
-    }
-
     addKeysBtn.addEventListener("click", () => {
-      if (rowCount < maxRows - 1) {
+      if (rowCount < maxRows) {
+        const newRow = createKeysRow(rowCount);
+        rowsContainer.appendChild(newRow);
         rowCount++;
-        rowsContainer.appendChild(createKeysRow(rowCount));
-        updatePreview();
-        checkAddButton();
       }
     });
 
     clearKeysBtn.addEventListener("click", () => {
-      const allSelects = document.querySelectorAll("select");
-      allSelects.forEach(select => select.value = "");
-      latestImgURL = "";
+      rowsContainer.innerHTML = "";
+      rowCount = 0;
       preview.style.display = "none";
       previewImg.src = "";
-      colorInput.value = "#2087c9";
-      rowCount = 0;
-      while (rowsContainer.children.length > 1) {
-        rowsContainer.removeChild(rowsContainer.lastChild);
-      }
-      checkAddButton();
+      latestImgURL = "";
     });
 
-    document.getElementById("chordForm").addEventListener("submit", e => {
-      e.preventDefault();
-      updatePreview();
-    });
-
-    colorInput.addEventListener("input", updatePreview);
+    colorInput.addEventListener("change", updatePreview);
 
     copyBtn.addEventListener("click", () => {
       if (!latestImgURL) return;
-      const embedCode = `<img src='${latestImgURL}' border="0" />\n<a href="https://www.hearandplay.com/main">Powered by hearandplay.com</a>`;
+
+      const embedCode = `<img src='${latestImgURL}' border=0 /><br /><a href="https://www.hearandplay.com/main">Powered by hearandplay.com</a>`;
       navigator.clipboard.writeText(embedCode).then(() => {
         copiedMsg.classList.add("show");
-        setTimeout(() => copiedMsg.classList.remove("show"), 2000);
-        copyBtn.focus();
+        setTimeout(() => copiedMsg.classList.remove("show"), 1200);
       });
     });
 
     downloadBtn.addEventListener("click", () => {
       if (!latestImgURL) return;
-      const a = document.createElement("a");
-      a.href = latestImgURL;
-      a.download = "chord.png";
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
+      // Direct download by opening the URL in a new tab (image will load, user can right-click save)
+      window.open(latestImgURL, "_blank");
     });
 
-    checkAddButton();
+    // Initialize with one row of keys
+    addKeysBtn.click();
   </script>
 </body>
 
