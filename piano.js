@@ -48,30 +48,41 @@ const notes = [
 
         function updatePreview() {
             const allSelects = document.querySelectorAll("select");
-            const selectedNotes = [];
+            let notesRaw = [];
 
             allSelects.forEach(select => {
-                if (select.value) {
-                    selectedNotes.push(select.value.replace("#", "s"));
-                }
+                notesRaw.push(select.value ? select.value.replace("#", "s") : "");
             });
 
-            if (selectedNotes.length === 0) {
-                preview.style.display = "none";
-                previewImg.src = "";
-                latestImgURL = "";
-                return;
+            // Remove multiple blanks in a row
+            let notesFiltered = [];
+            let lastWasBlank = false;
+
+            for (let note of notesRaw) {
+                if (note === "") {
+                    if (!lastWasBlank) {
+                        notesFiltered.push(""); // allow one blank
+                        lastWasBlank = true;
+                    }
+                    // else skip this blank
+                } else {
+                    notesFiltered.push(note);
+                    lastWasBlank = false;
+                }
             }
 
-            const notesStr = selectedNotes.join(",");
+            // Trim leading/trailing blanks (avoid leading/trailing ,,)
+            while (notesFiltered[0] === "") notesFiltered.shift();
+            while (notesFiltered[notesFiltered.length - 1] === "") notesFiltered.pop();
+
+            const notesStr = notesFiltered.join(",");
             const colorHex = colorInput.value.replace("#", "").toUpperCase();
+            const imageURL = `https://www.hearandplaymusic.com/dynamic_image/pianokeys.php?notes=${notesStr}&color=${colorHex}&size=5`;
 
-            latestImgURL = `https://www.hearandplaymusic.com/dynamic_image/pianokeys.php?notes=${notesStr}&color=${colorHex}&size=5`;
-
+            latestImgURL = imageURL;
             previewImg.src = latestImgURL;
             preview.style.display = "block";
         }
-
 
 
 
@@ -132,21 +143,43 @@ const notes = [
 
         downloadBtn.addEventListener("click", () => {
             const allSelects = document.querySelectorAll("select");
-            const selectedNotes = [];
+            let notesRaw = [];
 
             allSelects.forEach(select => {
-                if (select.value) {
-                    selectedNotes.push(select.value.replace("#", "s"));
-                }
-                // skip empty selects here so no ,, in URL
+                notesRaw.push(select.value ? select.value.replace("#", "s") : "");
             });
 
-            const notesStr = selectedNotes.join(",");
+            // Remove multiple blanks in a row
+            let notesFiltered = [];
+            let lastWasBlank = false;
+
+            for (let note of notesRaw) {
+                if (note === "") {
+                    if (!lastWasBlank) {
+                        notesFiltered.push("");
+                        lastWasBlank = true;
+                    }
+                } else {
+                    notesFiltered.push(note);
+                    lastWasBlank = false;
+                }
+            }
+
+            while (notesFiltered[0] === "") notesFiltered.shift();
+            while (notesFiltered[notesFiltered.length - 1] === "") notesFiltered.pop();
+
+            const notesStr = notesFiltered.join(",");
             const colorHex = colorInput.value.replace("#", "").toUpperCase();
             const downloadURL = `https://www.hearandplaymusic.com/dynamic_image/pianokeys.php?notes=${notesStr}&color=${colorHex}&size=5`;
 
-            window.open(downloadURL, "_blank");
+            const link = document.createElement("a");
+            link.href = downloadURL;
+            link.download = `chord-${Date.now()}.png`;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
         });
+
 
         const firstRow = createKeysRow(0);
         rowsContainer.appendChild(firstRow);
