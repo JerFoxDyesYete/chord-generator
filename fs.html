@@ -343,8 +343,11 @@
         function updatePreview() {
             const allSelects = document.querySelectorAll("select");
             const selectedNotes = [];
+
             allSelects.forEach(select => {
-                if (select.value) selectedNotes.push(select.value);
+                if (select.value) {
+                    selectedNotes.push(select.value.replace("#", "s"));
+                }
             });
 
             if (selectedNotes.length === 0) {
@@ -354,13 +357,17 @@
                 return;
             }
 
-            const notesStr = selectedNotes.map(n => n.replace("#", "s")).join(",");
+            const notesStr = selectedNotes.join(",");
             const colorHex = colorInput.value.replace("#", "").toUpperCase();
+
             latestImgURL = `https://www.hearandplaymusic.com/dynamic_image/pianokeys.php?notes=${notesStr}&color=${colorHex}&size=5`;
 
             previewImg.src = latestImgURL;
             preview.style.display = "block";
         }
+
+
+
 
         addKeysBtn.addEventListener("click", () => {
             if (rowCount < maxRows) {
@@ -392,22 +399,53 @@
         colorInput.addEventListener("change", updatePreview);
 
         copyBtn.addEventListener("click", () => {
-            if (!latestImgURL) return;
+            const allSelects = document.querySelectorAll("select");
+            const selectedNotesWithBlanks = [];
 
-            const embedCode = `<img src='${latestImgURL}' border=0 /><br /><a href="https://www.hearandplay.com/main">Powered by hearandplay.com</a>`;
+            allSelects.forEach(select => {
+                if (select.value) {
+                    selectedNotesWithBlanks.push(select.value.replace("#", "s"));
+                } else {
+                    selectedNotesWithBlanks.push("");
+                }
+            });
+
+            const notesStr = selectedNotesWithBlanks.join(",");
+            const colorHex = colorInput.value.replace("#", "").toUpperCase();
+            const embedURL = `https://www.hearandplaymusic.com/dynamic_image/pianokeys.php?notes=${notesStr}&color=${colorHex}&size=5`;
+
+            const embedCode = `<img src='${embedURL}' border=0 /><br /><a href="https://www.hearandplay.com/main">Powered by hearandplay.com</a>`;
+
             navigator.clipboard.writeText(embedCode).then(() => {
                 copiedMsg.classList.add("show");
                 setTimeout(() => copiedMsg.classList.remove("show"), 1200);
             });
         });
 
+
+
         downloadBtn.addEventListener("click", () => {
-            if (!latestImgURL) return;
-            window.open(latestImgURL, "_blank");
+            const allSelects = document.querySelectorAll("select");
+            const selectedNotes = [];
+
+            allSelects.forEach(select => {
+                if (select.value) {
+                    selectedNotes.push(select.value.replace("#", "s"));
+                }
+                // skip empty selects here so no ,, in URL
+            });
+
+            const notesStr = selectedNotes.join(",");
+            const colorHex = colorInput.value.replace("#", "").toUpperCase();
+            const downloadURL = `https://www.hearandplaymusic.com/dynamic_image/pianokeys.php?notes=${notesStr}&color=${colorHex}&size=5`;
+
+            window.open(downloadURL, "_blank");
         });
 
-        // Initialize with one row of keys
-        addKeysBtn.click();
+        const firstRow = createKeysRow(0);
+        rowsContainer.appendChild(firstRow);
+        rowCount = 1;
+
     </script>
 </body>
 
