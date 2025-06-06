@@ -1,5 +1,4 @@
-
-    * {
+* {
       box-sizing: border-box;
     }
 
@@ -57,12 +56,6 @@
       position: relative;
     }
 
-    #color-picker-wrapper {
-      position: absolute;
-      top: -20px;
-      right: 0;
-    }
-
     #keys-rows-container {
       display: flex;
       flex-direction: column;
@@ -77,6 +70,7 @@
       justify-content: center;
       gap: 10px;
       width: 100%;
+      flex-wrap: wrap;
     }
 
     select {
@@ -91,6 +85,12 @@
 
     select:focus {
       outline: 2px solid #3b5998;
+    }
+
+    #color-picker-wrapper {
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
 
     input[type="color"] {
